@@ -4,6 +4,7 @@
 package io.leitstand.jobs.model;
 
 import static io.leitstand.jobs.service.JobId.randomJobId;
+import static io.leitstand.jobs.service.JobName.jobName;
 import static io.leitstand.jobs.service.TaskId.randomTaskId;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.doReturn;
@@ -21,7 +22,6 @@ import javax.json.JsonReader;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.leitstand.jobs.service.JobName;
 import io.leitstand.jobs.service.TaskState;
 
 public class TaskProcessingServiceTest {
@@ -46,7 +46,7 @@ public class TaskProcessingServiceTest {
 		service = new TaskProcessingService(processors);
 		job = mock(Job.class);
 		when(job.getJobId()).thenReturn(randomJobId());
-		when(job.getJobName()).thenReturn(JobName.valueOf("unit-job_name"));
+		when(job.getJobName()).thenReturn(jobName("unit-job_name"));
 		task = mock(Job_Task.class);
 		when(task.getJob()).thenReturn(job);
 		when(task.getTaskId()).thenReturn(randomTaskId());

@@ -4,6 +4,7 @@
 package io.leitstand.jobs.model;
 
 import static io.leitstand.jobs.service.JobId.randomJobId;
+import static io.leitstand.jobs.service.JobName.jobName;
 import static io.leitstand.jobs.service.TaskId.randomTaskId;
 import static io.leitstand.jobs.service.TaskState.ACTIVE;
 import static io.leitstand.jobs.service.TaskState.FAILED;
@@ -50,7 +51,7 @@ public class InvokeRestApiElementTaskProcessorTest {
 		processor = new InvokeElementRestApiTaskProcessor(inventory);
 		job = mock(Job.class);
 		when(job.getJobId()).thenReturn(randomJobId());
-		when(job.getJobName()).thenReturn(JobName.valueOf("unit-job_name"));
+		when(job.getJobName()).thenReturn(jobName("unit-job_name"));
 		task = mock(Job_Task.class);
 		when(task.getJob()).thenReturn(job);
 		when(task.getTaskId()).thenReturn(randomTaskId());

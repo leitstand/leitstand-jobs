@@ -24,5 +24,9 @@ public enum TaskState {
 	public boolean isTerminalState(){
 		return terminal;
 	}
+
+	public static TaskState taskState(String state) {
+		return valueOf(state);
+	}
 	
 }
