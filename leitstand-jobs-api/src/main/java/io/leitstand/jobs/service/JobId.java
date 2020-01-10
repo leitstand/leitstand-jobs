@@ -18,6 +18,10 @@ public class JobId extends Scalar<String> {
 	public static final JobId randomJobId(){
 		return new JobId(UUID.randomUUID().toString());
 	}
+	
+	public static final JobId jobId(String id) {
+		return valueOf(id);
+	}
 
 	/**
 	 * Creates an <code>JobId</code> from the specified string.

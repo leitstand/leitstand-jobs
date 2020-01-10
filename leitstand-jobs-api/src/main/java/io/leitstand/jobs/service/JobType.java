@@ -15,8 +15,12 @@ public class JobType extends Scalar<String>{
 
 	private static final long serialVersionUID = 1L;
 
+	public static JobType jobType(String type) {
+		return valueOf(type);
+	}
+	
 	public static JobType valueOf(String type) {
-		return Scalar.fromString(type,JobType::new);
+		return fromString(type,JobType::new);
 	}
 
 	@NotNull(message="{job_type.required}")

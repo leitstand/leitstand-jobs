@@ -15,8 +15,12 @@ public class JobApplication extends Scalar<String>{
 
 	private static final long serialVersionUID = 1L;
 
+	public static JobApplication jobApplication(String application) {
+		return valueOf(application);
+	}
+	
 	public static JobApplication valueOf(String application) {
-		return Scalar.fromString(application,JobApplication::new);
+		return fromString(application,JobApplication::new);
 	}
 	
 	@NotNull(message="{job_application.required}")
@@ -32,5 +36,7 @@ public class JobApplication extends Scalar<String>{
 	public String getValue() {
 		return value;
 	}
+
+
 
 }

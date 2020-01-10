@@ -15,12 +15,22 @@ public class JobName extends Scalar<String>{
 
 	private static final long serialVersionUID = 1L;
 
-	public static JobName valueOf(Scalar<String> name) {
-		return valueOf(name.toString());
+	
+	public static JobName jobName(Scalar<String> name) {
+		return valueOf(name);
 	}
 	
+	public static JobName jobName(String name) {
+		return valueOf(name);
+	}
+
+	public static JobName valueOf(Scalar<String> name) {
+		return valueOf(Scalar.toString(name));
+	}
+
+	
 	public static JobName valueOf(String name) {
-		return Scalar.fromString(name,JobName::new);
+		return fromString(name,JobName::new);
 	}
 	
 	@NotNull(message="{job_name.required}")
