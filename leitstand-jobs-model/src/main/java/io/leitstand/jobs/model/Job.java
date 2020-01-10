@@ -54,8 +54,8 @@ import io.leitstand.jobs.service.JobName;
 import io.leitstand.jobs.service.JobType;
 import io.leitstand.jobs.service.TaskId;
 import io.leitstand.jobs.service.TaskState;
-import io.leitstand.security.auth.UserId;
-import io.leitstand.security.auth.jpa.UserIdConverter;
+import io.leitstand.security.auth.UserName;
+import io.leitstand.security.auth.jpa.UserNameConverter;
 
 @Entity
 @Table(schema="job", name="job")
@@ -169,8 +169,8 @@ public class Job extends VersionableEntity {
 	@Convert(converter=JobApplicationConverter.class)
 	private JobApplication application;
 
-	@Convert(converter=UserIdConverter.class)
-	private UserId owner;
+	@Convert(converter=UserNameConverter.class)
+	private UserName owner;
 	
 	protected Job(){
 		
@@ -180,7 +180,7 @@ public class Job extends VersionableEntity {
 			   JobType type, 
 			   JobId jobId, 
 			   JobName name,
-			   UserId owner){
+			   UserName owner){
 		super(jobId.toString());
 		this.application = application;
 		this.owner = owner;
@@ -273,11 +273,11 @@ public class Job extends VersionableEntity {
 		return application;
 	}
 	
-	public void setJobOwner(UserId owner) {
+	public void setJobOwner(UserName owner) {
 		this.owner = owner;
 	}
 	
-	public UserId getJobOwner() {
+	public UserName getJobOwner() {
 		return owner;
 	}
 

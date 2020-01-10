@@ -84,7 +84,7 @@ import io.leitstand.jobs.service.TaskState;
 import io.leitstand.jobs.service.TaskSubmission;
 import io.leitstand.jobs.service.TaskTransitionSubmission;
 import io.leitstand.security.auth.Authenticated;
-import io.leitstand.security.auth.UserId;
+import io.leitstand.security.auth.UserName;
 @Service
 public class DefaultJobService implements JobService {
 	
@@ -123,7 +123,7 @@ public class DefaultJobService implements JobService {
 
 	@Inject
 	@Authenticated
-	private UserId user;
+	private UserName user;
 	
 	protected DefaultJobService() {
 		
@@ -134,7 +134,7 @@ public class DefaultJobService implements JobService {
 					  InventoryClient inventory,
 					  JobEditor jobEditor,
 					  Messages messages,
-					  UserId user){
+					  UserName user){
 		this.repository = repository;
 		this.db = db;
 		this.inventory = inventory;

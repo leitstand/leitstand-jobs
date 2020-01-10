@@ -10,6 +10,7 @@ import static io.leitstand.jobs.service.TaskState.ACTIVE;
 import static io.leitstand.jobs.service.TaskState.COMPLETED;
 import static io.leitstand.jobs.service.TaskSubmission.newTaskSubmission;
 import static io.leitstand.jobs.service.TaskTransitionSubmission.newTaskTransitionSubmission;
+import static io.leitstand.security.auth.UserName.userName;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -37,7 +38,7 @@ import io.leitstand.jobs.service.TaskName;
 import io.leitstand.jobs.service.TaskSubmission;
 import io.leitstand.jobs.service.TaskTransitionSubmission;
 import io.leitstand.jobs.service.TaskType;
-import io.leitstand.security.auth.UserId;
+import io.leitstand.security.auth.UserName;
 
 public class RunJobIT extends JobsIT{
 
@@ -98,7 +99,7 @@ public class RunJobIT extends JobsIT{
 									 mock(InventoryClient.class),
 									 new JobEditor(repository),
 									 mock(Messages.class),
-									 UserId.valueOf("dummy"));
+									 userName("dummy"));
 
 		jobId = randomJobId();
 		start 	 = task(START);

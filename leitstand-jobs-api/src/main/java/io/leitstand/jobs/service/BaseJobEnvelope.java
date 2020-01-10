@@ -10,7 +10,7 @@ import javax.json.bind.annotation.JsonbProperty;
 import io.leitstand.commons.model.ValueObject;
 import io.leitstand.inventory.service.ElementGroupId;
 import io.leitstand.inventory.service.ElementGroupName;
-import io.leitstand.security.auth.UserId;
+import io.leitstand.security.auth.UserName;
 
 
 public class BaseJobEnvelope extends ValueObject {
@@ -65,9 +65,9 @@ public class BaseJobEnvelope extends ValueObject {
 			return (B) this;
 		}
 		
-		public B withJobOwner(UserId userId) {
+		public B withJobOwner(UserName userName) {
 			assertNotInvalidated(getClass(), object);
-			((BaseJobEnvelope)object).jobOwner = userId;
+			((BaseJobEnvelope)object).jobOwner = userName;
 			return (B) this;
 		}
 		
@@ -102,7 +102,7 @@ public class BaseJobEnvelope extends ValueObject {
 	private JobApplication jobApplication;
 	
 	@JsonbProperty("job_owner")
-	private UserId jobOwner;
+	private UserName jobOwner;
 	@JsonbProperty("job_state")
 	private TaskState jobState;
 
@@ -114,7 +114,7 @@ public class BaseJobEnvelope extends ValueObject {
 		return jobName;
 	}
 
-	public UserId getJobOwner() {
+	public UserName getJobOwner() {
 		return jobOwner;
 	}
 

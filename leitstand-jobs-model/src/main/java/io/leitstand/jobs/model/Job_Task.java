@@ -60,7 +60,7 @@ import io.leitstand.jobs.service.TaskId;
 import io.leitstand.jobs.service.TaskName;
 import io.leitstand.jobs.service.TaskState;
 import io.leitstand.jobs.service.TaskType;
-import io.leitstand.security.auth.UserId;
+import io.leitstand.security.auth.UserName;
 
 @Entity
 @Table(schema="job", name="job_task")
@@ -219,7 +219,7 @@ public class Job_Task extends AbstractEntity{
 		return job.getJobId();
 	}
 	
-	public UserId getJobOwner() {
+	public UserName getJobOwner() {
 		return job.getJobOwner();
 	}
 	

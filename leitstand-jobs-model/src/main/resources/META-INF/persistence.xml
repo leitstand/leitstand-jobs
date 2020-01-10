@@ -20,7 +20,7 @@
 		<class>io.leitstand.commons.jpa.BooleanConverter</class>
 		<class>io.leitstand.commons.jpa.SerializableJsonObjectConverter</class>
 		<class>io.leitstand.commons.jpa.URLConverter</class>
-		<class>io.leitstand.security.auth.jpa.UserIdConverter</class>
+		<class>io.leitstand.security.auth.jpa.UserNameConverter</class>
 		<shared-cache-mode>NONE</shared-cache-mode>
 		<properties>
 			<property name="eclipselink.logging.logger" value="JavaLogger"/>
