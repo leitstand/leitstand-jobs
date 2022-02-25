@@ -42,7 +42,7 @@ public class JobsResourceTest {
         ArgumentCaptor<JobQuery> queryCaptor = ArgumentCaptor.forClass(JobQuery.class);
         doReturn(emptyList()).when(service).findJobs(queryCaptor.capture());
         
-        long now = currentTimeMillis();
+        long now = currentTimeMillis()/1000*1000;
         Date from = new Date(now - 60000);
         Date to = new Date(now);
         
