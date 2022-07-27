@@ -20,27 +20,32 @@ import static io.leitstand.commons.model.ObjectUtil.isDifferent;
 import static io.leitstand.commons.model.ObjectUtil.optional;
 import static io.leitstand.jobs.model.Job_Task.findTaskById;
 import static io.leitstand.jobs.service.JobTaskInfo.newJobTaskInfo;
+import static io.leitstand.jobs.service.JobTaskMessage.newJobTaskMessage;
 import static io.leitstand.jobs.service.ReasonCode.JOB0200E_TASK_NOT_FOUND;
 import static io.leitstand.jobs.service.ReasonCode.JOB0203E_TASK_OWNED_BY_OTHER_JOB;
 import static io.leitstand.jobs.service.ReasonCode.JOB0204E_CANNOT_MODIFY_TASK_OF_RUNNING_JOB;
 import static io.leitstand.jobs.service.ReasonCode.JOB0205E_CANNOT_MODIFY_COMPLETED_TASK;
 import static io.leitstand.jobs.service.ReasonCode.JOB0206I_TASK_PARAMETER_UPDATED;
+import static java.lang.String.format;
 
 import javax.inject.Inject;
 import javax.json.JsonObject;
 
 import io.leitstand.commons.ConflictException;
 import io.leitstand.commons.EntityNotFoundException;
+import io.leitstand.commons.messages.Message;
 import io.leitstand.commons.messages.Messages;
 import io.leitstand.commons.model.Repository;
 import io.leitstand.commons.model.Service;
 import io.leitstand.inventory.service.ElementSettings;
 import io.leitstand.jobs.service.JobId;
 import io.leitstand.jobs.service.JobTaskInfo;
+import io.leitstand.jobs.service.JobTaskMessage;
 import io.leitstand.jobs.service.JobTaskService;
 import io.leitstand.jobs.service.ReasonCode;
 import io.leitstand.jobs.service.State;
 import io.leitstand.jobs.service.TaskId;
+import io.leitstand.security.auth.UserContext;
 
 @Service
 public class DefaultJobTaskService implements JobTaskService{
@@ -60,6 +65,9 @@ public class DefaultJobTaskService implements JobTaskService{
 	
 	@Inject
 	private Messages messages;
+	
+	@Inject
+	private UserContext user;
 	
 	public DefaultJobTaskService() {
 		// CDI 
@@ -150,11 +158,16 @@ public class DefaultJobTaskService implements JobTaskService{
             throw new ConflictException(JOB0205E_CANNOT_MODIFY_COMPLETED_TASK,taskId);
         }
         task.setParameter(parameters);
-        messages.add(createMessage(JOB0206I_TASK_PARAMETER_UPDATED, 
-                                   job.getJobId(),
-                                   job.getJobName(),
-                                   task.getTaskId(),
-                                   task.getTaskName()));
+        Message message = createMessage(JOB0206I_TASK_PARAMETER_UPDATED, 
+        								job.getJobId(),
+        								job.getJobName(),
+        								task.getTaskId(),
+        								task.getTaskName());
+        task.addMessage(newJobTaskMessage()
+        				.withReason(JOB0206I_TASK_PARAMETER_UPDATED)
+        				.withUserName(user.getUserName())
+        				.withMessage(format("User %s modified the task parameters.", user.getUserName())));
+        messages.add(message);
     }
 
 }

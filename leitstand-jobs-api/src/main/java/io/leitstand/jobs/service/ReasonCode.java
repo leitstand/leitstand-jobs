@@ -15,6 +15,8 @@
  */
 package io.leitstand.jobs.service;
 
+import static java.util.ResourceBundle.getBundle;
+
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.ResourceBundle;
@@ -43,9 +45,13 @@ public enum ReasonCode implements Reason{
     JOB0203E_TASK_OWNED_BY_OTHER_JOB,
     JOB0204E_CANNOT_MODIFY_TASK_OF_RUNNING_JOB,
     JOB0205E_CANNOT_MODIFY_COMPLETED_TASK,
-    JOB0206I_TASK_PARAMETER_UPDATED;
+    JOB0206I_TASK_PARAMETER_UPDATED,
+	JOB1000I_REST_API_CALL_SUCCEEDED,
+	JOB1001E_REST_API_CALL_REJECTED,
+	JOB1002E_REST_API_CALL_FAILED;
+	
     
-	private static final ResourceBundle MESSAGES = ResourceBundle.getBundle("JobMessages");
+	private static final ResourceBundle MESSAGES = getBundle("JobMessages");
 	
 	/**
 	 * {@inheritDoc}

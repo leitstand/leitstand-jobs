@@ -68,6 +68,7 @@ import io.leitstand.jobs.service.JobType;
 import io.leitstand.jobs.service.TaskId;
 import io.leitstand.jobs.service.TaskName;
 import io.leitstand.jobs.service.TaskType;
+import io.leitstand.security.auth.UserContext;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultJobTaskServiceTest {
@@ -98,6 +99,9 @@ public class DefaultJobTaskServiceTest {
 	
 	@Mock
 	private Messages messages;
+	
+	@Mock
+	private UserContext user;
 	
 	@InjectMocks
 	private DefaultJobTaskService service = new DefaultJobTaskService();

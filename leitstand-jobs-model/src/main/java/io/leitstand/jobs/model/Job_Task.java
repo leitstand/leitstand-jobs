@@ -31,18 +31,26 @@ import static io.leitstand.jobs.service.State.SKIPPED;
 import static io.leitstand.jobs.service.State.TIMEOUT;
 import static io.leitstand.jobs.service.State.WAITING;
 import static java.lang.String.format;
+import static java.util.Arrays.stream;
 import static java.util.Collections.unmodifiableList;
+import static java.util.stream.Collectors.toList;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import javax.json.JsonObject;
+import javax.persistence.AttributeOverride;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.Convert;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
@@ -66,6 +74,7 @@ import io.leitstand.jobs.jpa.TaskTypeConverter;
 import io.leitstand.jobs.service.JobApplication;
 import io.leitstand.jobs.service.JobId;
 import io.leitstand.jobs.service.JobName;
+import io.leitstand.jobs.service.JobTaskMessage;
 import io.leitstand.jobs.service.JobType;
 import io.leitstand.jobs.service.State;
 import io.leitstand.jobs.service.TaskId;
@@ -110,7 +119,6 @@ public class Job_Task extends AbstractEntity{
 
 	// A task will be scheduled only if the predecessor is completed and all
 	// other tasks with a higher priority are completed as well
-	
 	@OneToMany(mappedBy="from", cascade=ALL, orphanRemoval=true)
 	private List<Job_Task_Transition> successors;
 	
@@ -145,6 +153,14 @@ public class Job_Task extends AbstractEntity{
 	@Convert(converter=SerializableJsonObjectConverter.class)
 	private SerializableJsonObject parameter;
 	
+	@ElementCollection
+	@CollectionTable(schema="job", 
+					 name="job_task_journal", 
+					 joinColumns=@JoinColumn(name="task_id", referencedColumnName="id"))
+	@AttributeOverride(name="dateCreated", column=@Column(name="tscreated"))
+	@AttributeOverride(name="userName", column=@Column(name="username"))
+	private List<JobTaskMessage> messages;
+	
 	@OneToMany(mappedBy="to", cascade=ALL, orphanRemoval=true)
 	private List<Job_Task_Transition> predecessors;
 	
@@ -152,6 +168,7 @@ public class Job_Task extends AbstractEntity{
 		//JPA
 		this.successors = new LinkedList<>();
 		this.predecessors = new LinkedList<>();
+		this.messages = new LinkedList<>();
 	}
 	
 	public Job_Task(Job job, 
@@ -237,6 +254,7 @@ public class Job_Task extends AbstractEntity{
 		this.elementId = elementId;
 		this.parameter = serializable(parameter);
 		this.job = job;
+		this.messages = new LinkedList<>();
 		job.addTask(this);
 	}
 	
@@ -257,6 +275,7 @@ public class Job_Task extends AbstractEntity{
        this.elementId = elementId;
        this.parameter = serializable(parameter);
        this.job = job;
+       this.messages = new LinkedList<>();
        job.addTask(this);
 	}
 	
@@ -513,6 +532,30 @@ public class Job_Task extends AbstractEntity{
 		return job.getJobApplication();
 	}
 
-  
+	public List<JobTaskMessage> getMessages() {
+		List<JobTaskMessage> m = new ArrayList<>(messages);
+		m.sort((a,b) -> a.getDateCreated().compareTo(b.getDateCreated()));
+		return unmodifiableList(m);
+	}
+
+	public void addMessages(Collection<JobTaskMessage> messages) {
+		this.messages.addAll(messages);
+	}
+
+	
+	public void addMessages(JobTaskMessage.Builder... messages) {
+		this.messages.addAll(stream(messages)
+							 .map(JobTaskMessage.Builder::build)
+							 .collect(toList()));
+	}
+	
+	public void addMessage(JobTaskMessage message) {
+		this.messages.add(message);
+	}
+
+	public void addMessage(JobTaskMessage.Builder message) {
+		this.messages.add(message.build());
+	}
+
 	
 }

@@ -58,8 +58,8 @@ public class TaskProcessingService  {
 			if(task.isCanary() && result.getTaskState() == COMPLETED) {
 			    task.setTaskState(CONFIRM);
 			}
-			
-			// TODO Add task status message
+			task.addMessages(result.getMessages());
+		
 		} else {
 	        // An executable task with no processor is either
 	        // - a fork task, that has to be completed in order to fork the task flow into multiple branches or
