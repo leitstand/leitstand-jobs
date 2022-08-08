@@ -32,6 +32,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import io.leitstand.commons.messages.Messages;
@@ -88,9 +89,10 @@ public class JobTaskResource {
    @Path("/{job_id}/tasks/{task_id}/parameters")
    public Response setTaskParameters(@Valid @PathParam("job_id") JobId jobId, 
                                      @Valid @PathParam("task_id") TaskId taskId,
-                                     JsonObject parameters){
+                                     JsonObject parameters,
+                                     @Valid @QueryParam("comment") String comment){
         
-       service.setTaskParameter(jobId, taskId, parameters);
+       service.setTaskParameter(jobId, taskId, parameters, comment);
        return success(messages);
     }
 	

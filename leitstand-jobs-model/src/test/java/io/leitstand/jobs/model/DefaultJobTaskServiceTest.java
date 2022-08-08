@@ -270,7 +270,8 @@ public class DefaultJobTaskServiceTest {
         
         service.setTaskParameter(JOB_ID, 
                                  TASK_ID, 
-                                 mock(JsonObject.class));
+                                 mock(JsonObject.class),
+                                 null);
     }
     
     @Test
@@ -286,7 +287,8 @@ public class DefaultJobTaskServiceTest {
         
         service.setTaskParameter(JOB_ID, 
                                  TASK_ID,
-                                 mock(JsonObject.class));
+                                 mock(JsonObject.class),
+                                 null);
     }
     
     @Test
@@ -305,7 +307,8 @@ public class DefaultJobTaskServiceTest {
         
         service.setTaskParameter(JOB_ID, 
                                  TASK_ID,
-                                 mock(JsonObject.class));
+                                 mock(JsonObject.class),
+                                 null);
     }
     
     @Test
@@ -325,7 +328,8 @@ public class DefaultJobTaskServiceTest {
         
         service.setTaskParameter(JOB_ID, 
                                  TASK_ID,
-                                 mock(JsonObject.class));
+                                 mock(JsonObject.class),
+                                 null);
     }
     
     @Test
@@ -342,7 +346,8 @@ public class DefaultJobTaskServiceTest {
         
         service.setTaskParameter(JOB_ID, 
                                  TASK_ID,
-                                 parameter);
+                                 parameter,
+                                 null);
         
         verify(task).setParameter(parameter);
     }

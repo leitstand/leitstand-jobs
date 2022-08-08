@@ -18,6 +18,8 @@ package io.leitstand.jobs.model;
 import static io.leitstand.commons.messages.MessageFactory.createMessage;
 import static io.leitstand.commons.model.ObjectUtil.isDifferent;
 import static io.leitstand.commons.model.ObjectUtil.optional;
+import static io.leitstand.commons.model.StringUtil.isEmptyString;
+import static io.leitstand.commons.model.StringUtil.trim;
 import static io.leitstand.jobs.model.Job_Task.findTaskById;
 import static io.leitstand.jobs.service.JobTaskInfo.newJobTaskInfo;
 import static io.leitstand.jobs.service.JobTaskMessage.newJobTaskMessage;
@@ -37,12 +39,11 @@ import io.leitstand.commons.messages.Message;
 import io.leitstand.commons.messages.Messages;
 import io.leitstand.commons.model.Repository;
 import io.leitstand.commons.model.Service;
+import io.leitstand.commons.model.StringUtil;
 import io.leitstand.inventory.service.ElementSettings;
 import io.leitstand.jobs.service.JobId;
 import io.leitstand.jobs.service.JobTaskInfo;
-import io.leitstand.jobs.service.JobTaskMessage;
 import io.leitstand.jobs.service.JobTaskService;
-import io.leitstand.jobs.service.ReasonCode;
 import io.leitstand.jobs.service.State;
 import io.leitstand.jobs.service.TaskId;
 import io.leitstand.security.auth.UserContext;
@@ -135,14 +136,18 @@ public class DefaultJobTaskService implements JobTaskService{
 			   .withTaskState(task.getTaskState())
 			   .withDateLastModified(task.getDateModified())
 			   .withParameter(task.getParameters())
+			   .withJournal(task.getMessages())
 			   .build();	
 	}
 
     @Override
-    public void setTaskParameter(JobId jobId, TaskId taskId, JsonObject parameters) {
+    public void setTaskParameter(JobId jobId, 
+    							 TaskId taskId, 
+    							 JsonObject parameters,
+    							 String comment) {
         Job_Task task = repository.execute(findTaskById(taskId));
         if(task == null) {
-            throw new EntityNotFoundException(ReasonCode.JOB0200E_TASK_NOT_FOUND, taskId);
+            throw new EntityNotFoundException(JOB0200E_TASK_NOT_FOUND, taskId);
         }
         
         Job job = task.getJob();
@@ -163,11 +168,21 @@ public class DefaultJobTaskService implements JobTaskService{
         								job.getJobName(),
         								task.getTaskId(),
         								task.getTaskName());
+        
+        
+        
         task.addMessage(newJobTaskMessage()
         				.withReason(JOB0206I_TASK_PARAMETER_UPDATED)
         				.withUserName(user.getUserName())
-        				.withMessage(format("User %s modified the task parameters.", user.getUserName())));
+        				.withMessage(message(trim(comment))));
         messages.add(message);
+    }
+    
+    private String message(String comment) {
+    	if(isEmptyString(comment)) {
+    		return format("User %s modified the task parameters.",user.getUserName());
+    	}
+    	return format("User %s modified the task parameters (%s).",user.getUserName(),comment);
     }
 
 }

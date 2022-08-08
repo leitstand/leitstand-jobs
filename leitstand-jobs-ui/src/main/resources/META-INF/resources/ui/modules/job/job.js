@@ -71,7 +71,7 @@ export class Task extends Resource{
 	}
 
 	setParameter(params,taskParams){
-	    return this.json("/api/v1/jobs/{{&job}}/tasks/{{&task}}/parameters",params)
+	    return this.json("/api/v1/jobs/{{&job}}/tasks/{{&task}}/parameters?comment={{comment}}",params)
 	               .PUT(taskParams);     
 	}
 	
