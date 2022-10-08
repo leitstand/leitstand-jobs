@@ -73,6 +73,9 @@
 </ui-details>
 <!-- {{#editable}} -->
 <ui-form>
+<ui-group>
+	<ui-label>Task parameters</ui-label>
+	<ui-note>Review or update the task parameters. Please provide a comment that explains the applied parameter changes.</ui-note>
 	<task-editor name="parameters" style="height:40em"></task-editor>
 	<ui-input name="comment">
 		<ui-label>Comment</ui-label>
@@ -81,6 +84,7 @@
 	<ui-actions>
 	    <ui-button name="save-task" danger>Save parameters</ui-button>
 	</ui-actions>
+</ui-group>
 </ui-form>
 <!-- {{/editable}} -->
 <!-- {{^editable}} -->
