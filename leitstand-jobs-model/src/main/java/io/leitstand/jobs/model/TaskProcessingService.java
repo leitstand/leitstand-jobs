@@ -15,9 +15,14 @@
  */
 package io.leitstand.jobs.model;
 
+import static io.leitstand.commons.messages.Message.Severity.ERROR;
+import static io.leitstand.jobs.service.JobTaskMessage.newJobTaskMessage;
+import static io.leitstand.jobs.service.ReasonCode.JOB0300E_TASK_PROCESSOR_CALL_FAILED;
 import static io.leitstand.jobs.service.State.COMPLETED;
 import static io.leitstand.jobs.service.State.CONFIRM;
+import static io.leitstand.jobs.service.State.FAILED;
 import static java.lang.String.format;
+import static java.util.logging.Level.FINE;
 import static java.util.logging.Logger.getLogger;
 
 import java.util.logging.Logger;
@@ -45,21 +50,46 @@ public class TaskProcessingService  {
 		TaskProcessor processor = processors.findElementTaskProcessor(task);
 
 		if(processor != null) {
-            LOG.fine(() -> format("%s task processor for %s task (%s) of %s job (%s) in %s." , 
+            LOG.finer(() -> format("Calling %s task processor for %s task (%s) of %s job (%s) in %s." , 
                                   processor.getClass().getName(),
                                   task.getTaskName(), 
                                   task.getTaskId(), 
                                   task.getJobName(), 
                                   task.getJobId(), 
                                   task.getJobApplication()));
-
-			TaskResult result = processor.execute(task);
-			task.setTaskState(result.getTaskState());
-			if(task.isCanary() && result.getTaskState() == COMPLETED) {
-			    task.setTaskState(CONFIRM);
-			}
-			
-			// TODO Add task status message
+            try {
+				TaskResult result = processor.execute(task);
+				task.setTaskState(result.getTaskState());
+				if(task.isCanary() && result.getTaskState() == COMPLETED) {
+				    task.setTaskState(CONFIRM);
+				}
+				task.addMessages(result.getMessages());
+	            LOG.fine(() -> format("Task processor %s returned %s for %s task (%s) of %s job (%s) in %s." , 
+                        processor.getClass().getName(),
+                        result.getTaskState(),
+                        task.getTaskName(), 
+                        task.getTaskId(), 
+                        task.getJobName(), 
+                        task.getJobId(), 
+                        task.getJobApplication()));
+            } catch (Exception e) {
+            	task.setTaskState(FAILED);
+            	String message =format("Task processor %s reported an unexpected error for %s task (%s) of %s job (%s) in %s: %s" , 
+                        processor.getClass().getName(),
+                        task.getTaskName(), 
+                        task.getTaskId(), 
+                        task.getJobName(), 
+                        task.getJobId(), 
+                        task.getJobApplication(),
+                        e.getMessage());
+            	LOG.info(() -> format("%s: %s",JOB0300E_TASK_PROCESSOR_CALL_FAILED.getReasonCode(),message));
+                LOG.log(FINE,message,e);
+            	task.addMessage(newJobTaskMessage()
+            					.withSeverity(ERROR)
+            					.withReason(JOB0300E_TASK_PROCESSOR_CALL_FAILED)
+            					.withMessage(message));
+            }
+		
 		} else {
 	        // An executable task with no processor is either
 	        // - a fork task, that has to be completed in order to fork the task flow into multiple branches or

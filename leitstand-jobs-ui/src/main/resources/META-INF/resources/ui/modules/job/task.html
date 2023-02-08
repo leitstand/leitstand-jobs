@@ -15,7 +15,7 @@
 	<!-- {{#group_name}}  -->
 	<ui-property>
 		<ui-label>Pod</ui-label>
-		<ui-value><a href="/ui/views/inventory/pods/pod.html?group={{group_id}}" title="Open pod settings">{{.}}</ui-value>
+		<ui-value><a href="/ui/views/inventory/pods/pod.html?group={{group_id}}" title="Open pod settings">{{.}}</a></ui-value>
 	</ui-property>
 	<!-- {{/group_name}}  -->
 	<!-- {{#element_role}}  -->
@@ -24,7 +24,6 @@
 		<ui-value>{{.}}</ui-value>
 	</ui-property>
 	<!-- {{/element_role}}  -->
-	
 	<!-- {{#element_name}}  -->
 	<ui-property>
 		<ui-label>Element Name</ui-label>
@@ -74,12 +73,45 @@
 </ui-details>
 <!-- {{#editable}} -->
 <ui-form>
+<ui-group>
+	<ui-label>Task parameters</ui-label>
+	<ui-note>Review or update the task parameters. Please provide a comment that explains the applied parameter changes.</ui-note>
 	<task-editor name="parameters" style="height:40em"></task-editor>
+	<ui-input name="comment">
+		<ui-label>Comment</ui-label>
+		<ui-note>Comment the parameter change.</ui-note>
+	</ui-input>
 	<ui-actions>
 	    <ui-button name="save-task" danger>Save parameters</ui-button>
 	</ui-actions>
+</ui-group>
 </ui-form>
 <!-- {{/editable}} -->
 <!-- {{^editable}} -->
 <ui-code>{{json}}</ui-code>
 <!-- {{/editable}} -->
+<!-- {{#journal.length}} -->
+<ui-group>
+<ui-label>Journal</ui-label>
+<table class="list">
+<thead>
+	<tr>
+		<th>Date</th>
+		<th class="tiny">User</th>
+		<th class="check">Severity</th>
+		<th class="text large">Message</th>
+	</tr>
+</thead>
+<tbody>
+	<!-- {{#journal}} -->
+	<tr class="middle">
+		<td><ui-date dateTime readonly>{{date_created}}</ui-date></td>
+		<td>{{#user_name}}{{.}}{{/user_name}}{{^user_name}}-{{/user_name}}</td>
+		<td><span class="{{severity}}">{{severity}}</span></td>
+		<td class="text">{{message}}</td>
+	</tr>
+	<!-- {{/journal}} -->
+</tbody>
+</table>
+</ui-group>
+<!-- {{/journal.length}} -->

@@ -17,9 +17,39 @@ package io.leitstand.jobs.service;
 
 import javax.json.JsonObject;
 
+/**
+ * A service to read, execute or update a job task.
+ */
 public interface JobTaskService {
-	void updateTask(JobId jobId, TaskId taskId, State state);
+	/**
+	 * Returns the job task information of a single task.
+	 * @param jobId the job ID
+	 * @param taskId the task ID
+	 * @return the job task information.
+	 */
 	JobTaskInfo getJobTask(JobId jobId, TaskId taskId);
+
+	/**
+	 * Executes the task with the specified task ID.
+	 * @param jobId the job ID
+	 * @param taskId the task ID
+	 */
 	void executeTask(JobId jobId, TaskId taskId);
-	void setTaskParameter(JobId jobId, TaskId taskId, JsonObject parameters);
+	
+	/**
+	 * Updates the task state of the task with the specified ID.
+	 * @param jobId the job ID
+	 * @param taskId the task ID
+	 * @param state thew new task state.
+	 */
+	void updateTask(JobId jobId, TaskId taskId, State state);
+	
+	/**
+	 * Updates the task parameters of the task with the specified ID.
+	 * @param jobId the job ID
+	 * @param taskId the task ID
+	 * @param parameters the new parameters
+	 * @param comment a comment to describe the applied change
+	 */
+	void setTaskParameter(JobId jobId, TaskId taskId, JsonObject parameters, String comment);
 }

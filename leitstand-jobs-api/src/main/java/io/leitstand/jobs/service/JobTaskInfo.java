@@ -15,40 +15,78 @@
  */
 package io.leitstand.jobs.service;
 
+import static io.leitstand.commons.model.BuilderUtil.assertNotInvalidated;
+
+/**
+ * A task executed as part of a job. 
+ * <p>
+ * The <code>JobTaskInfo</code> object enhances the job task information with meta data of the job that owns the task.
+ */
 public class JobTaskInfo extends JobTask{
 
-	public static JobTaskInfoBuilder newJobTaskInfo(){
-		return new JobTaskInfoBuilder();
+	/**
+	 * Creates a <code>JobTaskInfo</code> value object builder.
+	 * @return a <code>JobTaskInfo</code> value object builder.
+	 */
+	public static Builder newJobTaskInfo(){
+		return new Builder();
 	}
 	
-	public static class JobTaskInfoBuilder extends JobTask.JobTaskBuilder<JobTaskInfo,JobTaskInfoBuilder>{
+	/**
+	 * The <code>JobTaskInfo</code> value object builder.
+	 */
+	public static class Builder extends JobTask.JobTaskBuilder<JobTaskInfo,Builder>{
 		
-		JobTaskInfoBuilder(){
+		Builder(){
 			super(new JobTaskInfo());
 		}
 		
-		public JobTaskInfoBuilder withJobId(JobId jobId){
+		/**
+		 * Sets the job ID.
+		 * @param jobId the job ID.
+		 * @return a reference to this builder to continue object creation.
+		 */
+		public Builder withJobId(JobId jobId){
+			assertNotInvalidated(getClass(), object);
 			object.jobId = jobId;
 			return this;
 		}
-		
-		public JobTaskInfoBuilder withJobName(JobName jobName){
+
+		/**
+		 * Sets the job name.
+		 * @param jobName the job name.
+		 * @return a reference to this builder to continue object creation.
+		 */
+		public Builder withJobName(JobName jobName){
+			assertNotInvalidated(getClass(), object);
 			object.jobName = jobName;
 			return this;
 		}
 
-		public JobTaskInfoBuilder withJobType(JobType jobType){
+		/**
+		 * Sets the job type.
+		 * @param jobType the job type.
+		 * @return a reference to this builder to continue object creation.
+		 */
+		public Builder withJobType(JobType jobType){
+			assertNotInvalidated(getClass(), object);
 			object.jobType = jobType;
 			return this;
 		}
 		
-		public JobTaskInfoBuilder withJobApplication(JobApplication jobApplication){
+		
+		/**
+		 * Sets the job application.
+		 * @param jobApplication the job application.
+		 * @return a reference to this builder to continue object creation.
+		 */
+		public Builder withJobApplication(JobApplication jobApplication){
+			assertNotInvalidated(getClass(), object);
 			object.jobApplication = jobApplication;
 			return this;
 		}
 		
 	}
-	
 	
 	private JobId jobId;
 	
@@ -58,21 +96,37 @@ public class JobTaskInfo extends JobTask{
 	
 	private JobApplication jobApplication;
 	
+	
+	/**
+	 * Returns the job ID.
+	 * @return the job ID.
+	 */
 	public JobId getJobId() {
 		return jobId;
 	}
 	
+	/**
+	 * Returns the job name.
+	 * @return the job name.
+	 */
 	public JobName getJobName() {
 		return jobName;
 	}
 
+	/**
+	 * Returns the job type.
+	 * @return the job type.
+	 */
 	public JobType getJobType() {
 		return jobType;
 	}
 
+	/**
+	 * Return the job application.
+	 * @return the job application.
+	 */
 	public JobApplication getJobApplication() {
 		return jobApplication;
 	}
-
 
 }

@@ -243,7 +243,9 @@ const taskController = function() {
 		},
 		buttons:{
 		    'save-task':function(){
-		        task.setParameter(this.location.params,this.getViewModel("parameters"));
+				const params = this.location.params;
+				params.comment = this.getViewModel("comment");
+		        task.setParameter(params,this.getViewModel("parameters"));
 		    }
 		}
 	});
